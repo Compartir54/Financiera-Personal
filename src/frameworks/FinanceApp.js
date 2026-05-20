@@ -41,6 +41,9 @@ export default class FinanceApp {
       transactionForm: document.getElementById('transactionForm'),
       goalForm: document.getElementById('goalForm'),
       salaryForm: document.getElementById('salaryForm'),
+      transactionSubmitButton: document.getElementById('transactionSubmitButton'),
+      goalSubmitButton: document.getElementById('goalSubmitButton'),
+      salarySubmitButton: document.getElementById('salarySubmitButton'),
       exportButton: document.getElementById('exportButton'),
       importInput: document.getElementById('importInput'),
       toast: document.getElementById('toast'),
@@ -59,6 +62,9 @@ export default class FinanceApp {
     this.elements.transactionForm.addEventListener('submit', (event) => this.handleTransactionSubmit(event));
     this.elements.goalForm.addEventListener('submit', (event) => this.handleGoalSubmit(event));
     this.elements.salaryForm.addEventListener('submit', (event) => this.handleSalarySubmit(event));
+    this.elements.transactionSubmitButton?.addEventListener('click', (event) => this.handleTransactionSubmit(event));
+    this.elements.goalSubmitButton?.addEventListener('click', (event) => this.handleGoalSubmit(event));
+    this.elements.salarySubmitButton?.addEventListener('click', (event) => this.handleSalarySubmit(event));
     this.elements.exportButton.addEventListener('click', () => this.handleExport());
     this.elements.importInput.addEventListener('change', (event) => this.handleImport(event));
     this.elements.loginForm.addEventListener('submit', (event) => this.handleLoginSubmit(event));
@@ -231,7 +237,6 @@ export default class FinanceApp {
 
   handleTransactionSubmit(event) {
     event.preventDefault();
-    const form = event.target;
     const payload = {
       type: this.elements.transactionType.value,
       amount: this.elements.transactionAmount.value,
@@ -242,7 +247,7 @@ export default class FinanceApp {
 
     try {
       this.controller.addTransaction(payload);
-      form.reset();
+      this.elements.transactionForm.reset();
       this.showToast('Transacción guardada correctamente.');
       this.loadState();
     } catch (error) {
@@ -261,7 +266,7 @@ export default class FinanceApp {
 
     try {
       this.controller.addGoal(payload);
-      event.target.reset();
+      this.elements.goalForm.reset();
       this.showToast('Meta de ahorro creada correctamente.');
       this.loadState();
     } catch (error) {

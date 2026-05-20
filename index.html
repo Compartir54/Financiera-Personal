@@ -85,14 +85,14 @@
             </label>
             <label>
               Fecha
-              <input id="transactionDate" type="text" placeholder="dd/mm/aaaa o aaaa-mm-dd" required />
+              <input id="transactionDate" type="date" required />
             </label>
             <label>
               Nota
               <input id="transactionNote" type="text" placeholder="Opcional" />
             </label>
             <div class="form-actions">
-              <button type="submit">Guardar transacción</button>
+              <button id="transactionSubmitButton" type="submit">Guardar transacción</button>
             </div>
           </form>
         </article>
@@ -114,10 +114,10 @@
             </label>
             <label>
               Fecha límite
-              <input id="goalDeadline" type="text" placeholder="dd/mm/aaaa o aaaa-mm-dd" required />
+              <input id="goalDeadline" type="date" required />
             </label>
             <div class="form-actions">
-              <button type="submit">Guardar meta</button>
+              <button id="goalSubmitButton" type="submit">Guardar meta</button>
             </div>
           </form>
         </article>
@@ -138,7 +138,7 @@
               <input id="salaryPeriod" type="text" placeholder="Mensual, Quincenal..." required />
             </label>
             <div class="form-actions">
-              <button type="submit">Actualizar salario</button>
+              <button id="salarySubmitButton" type="submit">Actualizar salario</button>
             </div>
           </form>
         </article>
