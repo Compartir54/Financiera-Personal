@@ -41,6 +41,10 @@ export default class FinanceApp {
       transactionForm: document.getElementById('transactionForm'),
       goalForm: document.getElementById('goalForm'),
       salaryForm: document.getElementById('salaryForm'),
+      goalContributionForm: document.getElementById('goalContributionForm'),
+      goalContributionSelect: document.getElementById('goalContributionSelect'),
+      goalContributionAmount: document.getElementById('goalContributionAmount'),
+      goalContributionSubmitButton: document.getElementById('goalContributionSubmitButton'),
       transactionType: document.getElementById('transactionType'),
       transactionAmount: document.getElementById('transactionAmount'),
       transactionCategory: document.getElementById('transactionCategory'),
@@ -65,9 +69,11 @@ export default class FinanceApp {
     this.elements.transactionForm.addEventListener('submit', (event) => this.handleTransactionSubmit(event));
     this.elements.goalForm.addEventListener('submit', (event) => this.handleGoalSubmit(event));
     this.elements.salaryForm.addEventListener('submit', (event) => this.handleSalarySubmit(event));
+    this.elements.goalContributionForm?.addEventListener('submit', (event) => this.handleGoalContributionSubmit(event));
     this.elements.transactionSubmitButton?.addEventListener('click', (event) => this.handleTransactionSubmit(event));
     this.elements.goalSubmitButton?.addEventListener('click', (event) => this.handleGoalSubmit(event));
     this.elements.salarySubmitButton?.addEventListener('click', (event) => this.handleSalarySubmit(event));
+    this.elements.goalContributionSubmitButton?.addEventListener('click', (event) => this.handleGoalContributionSubmit(event));
     this.elements.exportButton.addEventListener('click', () => this.handleExport());
     this.elements.importInput.addEventListener('change', (event) => this.handleImport(event));
     this.elements.loginForm.addEventListener('submit', (event) => this.handleLoginSubmit(event));
@@ -108,7 +114,25 @@ export default class FinanceApp {
     this.renderAccountSummary();
     this.renderTransactions();
     this.renderGoals();
+    this.populateGoalContributionOptions();
     this.fillSalaryForm();
+  }
+
+  populateGoalContributionOptions() {
+    const goals = this.controller.getSavings().goals;
+    const select = this.elements.goalContributionSelect;
+    if (!select) {
+      return;
+    }
+
+    select.innerHTML = '<option value="">Selecciona una meta</option>';
+    goals.forEach((goal) => {
+      const progress = goal.targetAmount ? Math.round((Number(goal.currentAmount) / Number(goal.targetAmount)) * 100) : 0;
+      const option = document.createElement('option');
+      option.value = goal.id;
+      option.textContent = `${goal.name} (${this.formatCurrency(goal.targetAmount)} - ${progress}% completado)`;
+      select.appendChild(option);
+    });
   }
 
   isAuthenticated() {
@@ -271,6 +295,41 @@ export default class FinanceApp {
       this.controller.addGoal(payload);
       this.elements.goalForm.reset();
       this.showToast('Meta de ahorro creada correctamente.');
+      this.loadState();
+    } catch (error) {
+      this.showToast(error.message, true);
+    }
+  }
+
+  handleGoalContributionSubmit(event) {
+    event.preventDefault();
+    const goalId = this.elements.goalContributionSelect.value;
+    const amount = Number(this.elements.goalContributionAmount.value);
+
+    if (!goalId) {
+      this.showToast('Selecciona una meta para aportar.', true);
+      return;
+    }
+
+    if (Number.isNaN(amount) || amount <= 0) {
+      this.showToast('Ingresa un monto válido para aportar.', true);
+      return;
+    }
+
+    const currentGoals = this.controller.getSavings().goals;
+    const selectedGoal = currentGoals.find((goal) => goal.id === goalId);
+
+    if (!selectedGoal) {
+      this.showToast('Meta seleccionada no encontrada.', true);
+      return;
+    }
+
+    const updatedAmount = Number(selectedGoal.currentAmount) + amount;
+
+    try {
+      this.controller.updateGoal(goalId, { currentAmount: updatedAmount });
+      this.elements.goalContributionForm.reset();
+      this.showToast('Aporte a la meta registrado correctamente.');
       this.loadState();
     } catch (error) {
       this.showToast(error.message, true);

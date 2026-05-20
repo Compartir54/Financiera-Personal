@@ -142,6 +142,26 @@
             </div>
           </form>
         </article>
+
+        <article class="form-card">
+          <h2>Aportar a una meta</h2>
+          <form id="goalContributionForm">
+            <label>
+              Seleccionar meta
+              <select id="goalContributionSelect" required>
+                <option value="">Selecciona una meta</option>
+              </select>
+            </label>
+            <label>
+              Monto a aportar
+              <input id="goalContributionAmount" type="number" step="0.01" min="0.01" required />
+            </label>
+            <div class="form-actions">
+              <button id="goalContributionSubmitButton" type="submit">Aportar a meta</button>
+            </div>
+          </form>
+          <p class="note">Elige una meta existente y registra tu aporte al monto actual.</p>
+        </article>
       </section>
 
       <section class="tables-grid">
