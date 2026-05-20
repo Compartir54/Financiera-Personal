@@ -46,7 +46,10 @@ export default class FinanceApp {
       toast: document.getElementById('toast'),
       salaryGross: document.getElementById('salaryGross'),
       salaryNet: document.getElementById('salaryNet'),
-      salaryPeriod: document.getElementById('salaryPeriod')
+      salaryPeriod: document.getElementById('salaryPeriod'),
+      transactionNote: document.getElementById('transactionNote'),
+      transactionDate: document.getElementById('transactionDate'),
+      goalDeadline: document.getElementById('goalDeadline')
     };
 
     this.init();
@@ -61,6 +64,31 @@ export default class FinanceApp {
     this.elements.loginForm.addEventListener('submit', (event) => this.handleLoginSubmit(event));
     this.elements.logoutButton.addEventListener('click', () => this.handleLogout());
     this.updateView();
+  }
+
+  parseDate(value) {
+    if (!value) {
+      return '';
+    }
+
+    const isoPattern = /^\d{4}-\d{2}-\d{2}$/;
+    const spanishPattern = /^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/;
+
+    if (isoPattern.test(value)) {
+      return value;
+    }
+
+    const spanishMatch = value.match(spanishPattern);
+    if (spanishMatch) {
+      return `${spanishMatch[3]}-${spanishMatch[2]}-${spanishMatch[1]}`;
+    }
+
+    const date = new Date(value);
+    if (!Number.isNaN(date.getTime())) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    return value;
   }
 
   loadState() {
@@ -208,8 +236,8 @@ export default class FinanceApp {
       type: this.elements.transactionType.value,
       amount: this.elements.transactionAmount.value,
       category: this.elements.transactionCategory.value,
-      date: this.elements.transactionDate.value,
-      note: document.getElementById('transactionNote').value
+      date: this.parseDate(this.elements.transactionDate.value),
+      note: this.elements.transactionNote.value
     };
 
     try {
@@ -228,7 +256,7 @@ export default class FinanceApp {
       name: document.getElementById('goalName').value,
       targetAmount: document.getElementById('goalTarget').value,
       currentAmount: document.getElementById('goalCurrent').value,
-      deadline: document.getElementById('goalDeadline').value
+      deadline: this.parseDate(this.elements.goalDeadline.value)
     };
 
     try {
