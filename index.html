@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financiera Personal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="login-shell" id="loginShell">
+    <article class="login-card">
+      <h1>Bienvenido a Financiera Personal</h1>
+      <p>Introduce tus credenciales para acceder al dashboard local.</p>
+      <form id="loginForm">
+        <label>
+          Usuario
+          <input id="loginUsername" type="text" autocomplete="username" required />
+        </label>
+        <label>
+          Contraseña
+          <input id="loginPassword" type="password" autocomplete="current-password" required />
+        </label>
+        <div class="form-actions">
+          <button type="submit">Iniciar sesión</button>
+        </div>
+      </form>
+      <p class="login-note">Usuario: <strong>admin</strong> | Contraseña: <strong>financiera123</strong></p>
+    </article>
+  </div>
+
+  <div class="app-shell hidden" id="appShell">
+    <header class="app-header">
+      <div>
+        <h1>Financiera Personal</h1>
+        <p>Administra tus ingresos, gastos, metas y ahorros de forma local.</p>
+      </div>
+      <div class="header-actions">
+        <button id="exportButton" type="button">Exportar datos</button>
+        <label class="import-label">
+          Importar datos
+          <input id="importInput" type="file" accept="application/json" hidden />
+        </label>
+        <button id="logoutButton" type="button" class="logout-button hidden">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="dashboard" aria-label="Resumen financiero">
+        <div class="card" id="balanceCard">
+          <h2>Saldo</h2>
+          <p id="balanceValue">$0.00</p>
+        </div>
+        <div class="card" id="incomeCard">
+          <h2>Ingresos</h2>
+          <p id="incomeValue">$0.00</p>
+        </div>
+        <div class="card" id="expenseCard">
+          <h2>Gastos</h2>
+          <p id="expenseValue">$0.00</p>
+        </div>
+        <div class="card" id="savingRatioCard">
+          <h2>% Ahorro</h2>
+          <p id="savingRatioValue">0%</p>
+        </div>
+      </section>
+
+      <section class="forms-grid">
+        <article class="form-card">
+          <h2>Registrar transacción</h2>
+          <form id="transactionForm">
+            <label>
+              Tipo
+              <select id="transactionType" required>
+                <option value="income">Ingreso</option>
+                <option value="expense">Gasto</option>
+              </select>
+            </label>
+            <label>
+              Monto
+              <input id="transactionAmount" type="number" step="0.01" min="0" required />
+            </label>
+            <label>
+              Categoría
+              <input id="transactionCategory" type="text" placeholder="Salario, Compras, Ahorro..." required />
+            </label>
+            <label>
+              Fecha
+              <input id="transactionDate" type="date" required />
+            </label>
+            <label>
+              Nota
+              <input id="transactionNote" type="text" placeholder="Opcional" />
+            </label>
+            <div class="form-actions">
+              <button type="submit">Guardar transacción</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="form-card">
+          <h2>Crear meta de ahorro</h2>
+          <form id="goalForm">
+            <label>
+              Nombre de meta
+              <input id="goalName" type="text" required />
+            </label>
+            <label>
+              Objetivo
+              <input id="goalTarget" type="number" step="0.01" min="0" required />
+            </label>
+            <label>
+              Monto actual
+              <input id="goalCurrent" type="number" step="0.01" min="0" value="0" required />
+            </label>
+            <label>
+              Fecha límite
+              <input id="goalDeadline" type="date" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit">Guardar meta</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="form-card">
+          <h2>Salario y análisis</h2>
+          <form id="salaryForm">
+            <label>
+              Salario bruto
+              <input id="salaryGross" type="number" step="0.01" min="0" required />
+            </label>
+            <label>
+              Salario neto
+              <input id="salaryNet" type="number" step="0.01" min="0" required />
+            </label>
+            <label>
+              Periodo
+              <input id="salaryPeriod" type="text" placeholder="Mensual, Quincenal..." required />
+            </label>
+            <div class="form-actions">
+              <button type="submit">Actualizar salario</button>
+            </div>
+          </form>
+        </article>
+      </section>
+
+      <section class="tables-grid">
+        <article class="table-card">
+          <div class="table-header">
+            <h2>Transacciones</h2>
+          </div>
+          <table id="transactionsTable">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Monto</th>
+                <th>Categoría</th>
+                <th>Fecha</th>
+                <th>Nota</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+
+        <article class="table-card">
+          <div class="table-header">
+            <h2>Metas de ahorro</h2>
+          </div>
+          <table id="goalsTable">
+            <thead>
+              <tr>
+                <th>Meta</th>
+                <th>Objetivo</th>
+                <th>Actual</th>
+                <th>Progreso</th>
+                <th>Fecha límite</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script type="module" src="./src/frameworks/FinanceApp.js"></script>
+</body>
+</html>

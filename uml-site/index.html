@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UML - Financiera Personal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f7fb;
+      color: #111827;
+      line-height: 1.6;
+    }
+    .page-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 24px;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      border-radius: 24px;
+      padding: 24px;
+      background: white;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      min-height: fit-content;
+    }
+    .sidebar h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #111827;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .sidebar li {
+      border-radius: 14px;
+      background: #f8fafc;
+      padding: 12px 14px;
+    }
+    .sidebar a {
+      color: #1d4ed8;
+      text-decoration: none;
+      font-weight: 600;
+      display: block;
+    }
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.5vw, 2.75rem);
+    }
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    section {
+      background: white;
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      margin-bottom: 24px;
+    }
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      color: #1f2937;
+    }
+    .diagram-wrapper {
+      background: #f9fafb;
+      padding: 18px;
+      border-radius: 18px;
+      overflow-x: auto;
+    }
+    .note {
+      margin-top: 10px;
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="content">
+      <header>
+        <div>
+          <h1>UML de Financiera Personal</h1>
+          <p>Visor independiente del diseño de la aplicación y sus conexiones.</p>
+        </div>
+        <div class="top-actions">
+          <a class="button" id="openMainAppButton" href="#">Abrir app principal</a>
+        </div>
+      </header>
+
+      <section id="class-diagram">
+      <h2>Diagrama de clases</h2>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+          classDiagram
+            class Transaction {
+              +String id
+              +String type
+              +Number amount
+              +String category
+              +String date
+              +String note
+              +isIncome()
+              +isExpense()
+            }
+            class Account {
+              +String id
+              +String name
+              +Number balance
+              +applyTransaction(transaction)
+            }
+            class SavingGoal {
+              +String id
+              +String name
+              +Number targetAmount
+              +Number currentAmount
+              +String deadline
+              +progressPercentage()
+            }
+            class Salary {
+              +Number grossAmount
+              +Number netAmount
+              +String period
+              +savingsRatio(savingsAmount)
+            }
+            class RegisterExpenseUseCase {
+              +execute(expensePayload)
+            }
+            class RegisterGoalUseCase {
+              +execute(goalPayload)
+            }
+            class UpdateTransactionUseCase {
+              +execute(transactionId, updateData)
+            }
+            class UpdateGoalUseCase {
+              +execute(goalId, updateData)
+            }
+            class CalculateSavingsUseCase {
+              +execute()
+            }
+            class AnalyzeFinancialRelationsStrategy {
+              +apply(totalIncome, totalExpenses, netSavings, salary)
+            }
+            class FinanceController {
+              +addTransaction(transactionData)
+              +addGoal(goalData)
+              +updateTransaction(transactionId, updateData)
+              +updateGoal(goalId, updateData)
+              +getSavings()
+              +analyzeFinancialRelations(summary)
+              +saveSalary(payload)
+              +exportData()
+              +importData(payload)
+            }
+            class FinanceRepository {
+              +createTransaction(payload)
+              +createGoal(payload)
+              +findTransactionById(id)
+              +findGoalById(id)
+              +updateTransaction(id, updatedTransaction)
+              +updateGoal(id, updatedGoal)
+              +deleteTransaction(id)
+              +deleteGoal(id)
+              +listTransactions()
+              +listGoals()
+              +getAccount()
+              +getSalary()
+              +saveSalary(payload)
+              +exportData()
+              +importData(payload)
+            }
+            class LocalStorageFinanceDriver {
+              +saveTransaction(transaction)
+              +updateTransaction(id, updatedTransaction)
+              +deleteTransaction(id)
+              +saveGoal(goal)
+              +updateGoal(id, updatedGoal)
+              +deleteGoal(id)
+              +fetchTransactions()
+              +fetchGoals()
+              +fetchAccount()
+              +fetchSalary()
+              +applyTransactionToAccount(transaction)
+              +rebuildAccountFromTransactions()
+              +saveSalary(salary)
+              +exportData()
+              +importData(payload)
+            }
+            FinanceApp --> FinanceController
+            FinanceController --> RegisterExpenseUseCase
+            FinanceController --> RegisterGoalUseCase
+            FinanceController --> UpdateTransactionUseCase
+            FinanceController --> UpdateGoalUseCase
+            FinanceController --> CalculateSavingsUseCase
+            FinanceController --> AnalyzeFinancialRelationsStrategy
+            RegisterExpenseUseCase --> FinanceRepository
+            RegisterGoalUseCase --> FinanceRepository
+            UpdateTransactionUseCase --> FinanceRepository
+            UpdateGoalUseCase --> FinanceRepository
+            CalculateSavingsUseCase --> FinanceRepository
+            FinanceController --> FinanceRepository
+            FinanceRepository --> LocalStorageFinanceDriver
+            LocalStorageFinanceDriver --> Account
+            AnalyzeFinancialRelationsStrategy --> Salary
+        </div>
+      </div>
+      <p class="note">Diagrama de clases independiente del sitio principal.</p>
+    </section>
+
+    <section id="sequence-diagram">
+      <h2>Diagrama de secuencia</h2>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+          sequenceDiagram
+            actor Usuario
+            participant UI
+            participant Controller
+            participant UseCase
+            participant Repository
+            participant Driver
+
+            alt Registrar transacción
+              Usuario->>UI: hace clic en "Registrar transacción"
+              UI->>Controller: addTransaction(expenseData)
+              Controller->>UseCase: execute(expenseData)
+              UseCase->>Repository: createTransaction(expenseData)
+              Repository->>Driver: saveTransaction(expenseData)
+              Driver-->>Repository: transacción guardada
+              Repository->>Driver: applyTransactionToAccount(expenseData)
+              Driver-->>Repository: cuenta actualizada
+              Repository-->>UseCase: confirmación
+              UseCase-->>Controller: transacción registrada
+              Controller-->>UI: actualizar dashboard
+            end
+
+            alt Guardar meta
+              Usuario->>UI: hace clic en "Guardar meta"
+              UI->>Controller: addGoal(goalData)
+              Controller->>UseCase: execute(goalData)
+              UseCase->>Repository: createGoal(goalData)
+              Repository->>Driver: saveGoal(goalData)
+              Driver-->>Repository: meta guardada
+              Repository-->>UseCase: confirmación
+              UseCase-->>Controller: meta registrada
+              Controller-->>UI: actualizar dashboard
+            end
+
+            alt Iniciar sesión
+              Usuario->>UI: introduce credenciales
+              UI->>Controller: handleLoginSubmit(credentials)
+              Controller-->>UI: acceso permitido / denegado
+            end
+        </div>
+      </div>
+      <p class="note">Flujo independiente de la página principal.</p>
+    </section>
+
+      <section id="component-diagram">
+        <h2>Diagrama de componentes</h2>
+        <div class="diagram-wrapper">
+          <div class="mermaid">
+            flowchart TB
+              subgraph UI [Capa de Presentación]
+                A[FinanceApp]
+              end
+              subgraph Adapter [Adaptadores]
+                B[FinanceController]
+                C[FinanceRepository]
+              end
+              subgraph Application [Capa de Aplicación]
+                D[UseCases]
+                E[AnalyzeFinancialRelationsStrategy]
+              end
+              subgraph Framework [Frameworks]
+                F[LocalStorageFinanceDriver]
+              end
+              subgraph Domain [Dominio]
+                G[Transaction\nAccount\nSavingGoal\nSalary]
+              end
+              A --> B
+              B --> D
+              D --> C
+              C --> F
+              C --> G
+              E --> G
+          </div>
+        </div>
+        <p class="note">Representa cómo se comunican las capas de la aplicación.</p>
+      </section>
+
+      <section id="usecase-diagram">
+        <h2>Diagrama de casos de uso</h2>
+        <div class="diagram-wrapper">
+          <div class="mermaid">
+            flowchart LR
+              Usuario([Usuario])
+              Login((Iniciar sesión))
+              Trans((Registrar transacción))
+              Goal((Crear meta de ahorro))
+              Salary((Actualizar salario))
+              Export((Exportar datos))
+              Import((Importar datos))
+              Summary((Ver resumen financiero))
+
+              Usuario --> Login
+              Usuario --> Trans
+              Usuario --> Goal
+              Usuario --> Salary
+              Usuario --> Export
+              Usuario --> Import
+              Usuario --> Summary
+          </div>
+        </div>
+        <p class="note">Casos de uso básicos representados como flujo para asegurar compatibilidad con Mermaid.</p>
+      </section>
+
+      <section id="deployment-diagram">
+        <h2>Diagrama de despliegue</h2>
+        <div class="diagram-wrapper">
+          <div class="mermaid">
+            flowchart LR
+              Browser[Usuario / Navegador]
+              AppServer[App principal<br/>Puerto 8080]
+              UmlServer[Visor UML independiente<br/>Puerto 8081]
+              LocalStorage[LocalStorage del navegador]
+
+              Browser --> AppServer
+              Browser --> UmlServer
+              Browser --> LocalStorage
+              LocalStorage --> Browser
+          </div>
+        </div>
+        <p class="note">Despliegue local para la aplicación principal y el visor UML en puertos separados.</p>
+      </section>
+    </div>
+
+    <aside class="sidebar">
+      <h3>Diagramas UML</h3>
+      <ul>
+        <li><a href="#class-diagram">Diagrama de clases</a></li>
+        <li><a href="#sequence-diagram">Diagrama de secuencia</a></li>
+        <li><a href="#component-diagram">Diagrama de componentes</a></li>
+        <li><a href="#usecase-diagram">Diagrama de casos de uso</a></li>
+        <li><a href="#deployment-diagram">Diagrama de despliegue</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+
+    const button = document.getElementById('openMainAppButton');
+    if (button) {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        const host = window.location.hostname;
+        let targetUrl = '';
+
+        if (host.includes('-8081.')) {
+          targetUrl = `${window.location.protocol}//${host.replace('-8081.', '-8080.')}`;
+        } else if (window.location.port === '8081') {
+          targetUrl = `${window.location.protocol}//${window.location.hostname}:8080`;
+        } else {
+          targetUrl = `${window.location.protocol}//${window.location.hostname}`;
+        }
+
+        window.location.href = targetUrl;
+      });
+    }
+  </script>
+</body>
+</html>

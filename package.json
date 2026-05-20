@@ -1,0 +1,16 @@
+{
+  "name": "financiera-personal",
+  "version": "1.0.0",
+  "description": "Aplicación local para administrar finanzas personales con Clean Architecture.",
+  "type": "module",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -c-1",
+    "uml": "npx http-server ./uml-site -p 8081 -c-1",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "vitest": "^4.1.6"
+  }
+}
