@@ -45,6 +45,9 @@ export default class FinanceApp {
       goalContributionSelect: document.getElementById('goalContributionSelect'),
       goalContributionAmount: document.getElementById('goalContributionAmount'),
       goalContributionSubmitButton: document.getElementById('goalContributionSubmitButton'),
+      progressShell: document.getElementById('progressShell'),
+      progressLabel: document.getElementById('progressLabel'),
+      progressBarInner: document.getElementById('progressBarInner'),
       transactionType: document.getElementById('transactionType'),
       transactionAmount: document.getElementById('transactionAmount'),
       transactionCategory: document.getElementById('transactionCategory'),
@@ -62,6 +65,10 @@ export default class FinanceApp {
       goalDeadline: document.getElementById('goalDeadline')
     };
 
+    this.progressDuration = 40000;
+    this.progressTimer = null;
+    this.progressFinishTimer = null;
+    this.progressInProgress = false;
     this.init();
   }
 
@@ -118,6 +125,63 @@ export default class FinanceApp {
     this.fillSalaryForm();
   }
 
+  showProgressScreen() {
+    this.progressInProgress = true;
+    this.elements.loginShell.classList.add('hidden');
+    this.elements.appShell.classList.add('hidden');
+    this.elements.progressShell?.classList.remove('hidden');
+    this.elements.logoutButton.classList.add('hidden');
+    this.startDashboardProgress();
+  }
+
+  startDashboardProgress() {
+    if (!this.elements.progressBarInner || !this.elements.progressLabel) {
+      return;
+    }
+
+    this.clearProgressTimers();
+    const startTime = Date.now();
+    const endTime = startTime + this.progressDuration;
+
+    const update = () => {
+      const now = Date.now();
+      const remaining = Math.max(0, endTime - now);
+      const progress = Math.min(100, Math.round(((now - startTime) / this.progressDuration) * 100));
+      this.elements.progressBarInner.style.width = `${progress}%`;
+      this.elements.progressLabel.textContent = `Cargando el dashboard… ${Math.ceil(remaining / 1000)}s restantes`;
+      if (remaining <= 0) {
+        this.finishDashboardProgress();
+      }
+    };
+
+    update();
+    this.progressTimer = window.setInterval(update, 250);
+    this.progressFinishTimer = window.setTimeout(() => this.finishDashboardProgress(), this.progressDuration);
+  }
+
+  finishDashboardProgress() {
+    this.clearProgressTimers();
+    this.progressInProgress = false;
+    if (this.elements.progressBarInner) {
+      this.elements.progressBarInner.style.width = '100%';
+    }
+    this.elements.progressShell?.classList.add('hidden');
+    this.elements.appShell.classList.remove('hidden');
+    this.elements.logoutButton.classList.remove('hidden');
+    this.loadState();
+  }
+
+  clearProgressTimers() {
+    if (this.progressTimer) {
+      window.clearInterval(this.progressTimer);
+      this.progressTimer = null;
+    }
+    if (this.progressFinishTimer) {
+      window.clearTimeout(this.progressFinishTimer);
+      this.progressFinishTimer = null;
+    }
+  }
+
   populateGoalContributionOptions() {
     const goals = this.controller.getSavings().goals;
     const select = this.elements.goalContributionSelect;
@@ -142,13 +206,21 @@ export default class FinanceApp {
   updateView() {
     if (this.isAuthenticated()) {
       this.elements.loginShell.classList.add('hidden');
-      this.elements.appShell.classList.remove('hidden');
-      this.elements.logoutButton.classList.remove('hidden');
-      this.loadState();
+      this.elements.progressShell?.classList.toggle('hidden', !this.progressInProgress);
+      if (this.progressInProgress) {
+        this.elements.appShell.classList.add('hidden');
+        this.elements.logoutButton.classList.add('hidden');
+      } else {
+        this.elements.appShell.classList.remove('hidden');
+        this.elements.logoutButton.classList.remove('hidden');
+        this.elements.progressShell?.classList.add('hidden');
+        this.loadState();
+      }
     } else {
       this.elements.loginShell.classList.remove('hidden');
       this.elements.appShell.classList.add('hidden');
       this.elements.logoutButton.classList.add('hidden');
+      this.elements.progressShell?.classList.add('hidden');
     }
   }
 
@@ -160,8 +232,8 @@ export default class FinanceApp {
     if (username === this.credentials.username && password === this.credentials.password) {
       localStorage.setItem(this.authKey, 'true');
       this.elements.loginForm.reset();
-      this.showToast('Inicio de sesión correcto.');
-      this.updateView();
+      this.showToast('Inicio de sesión correcto. Iniciando tu recorrido...');
+      this.showProgressScreen();
       return;
     }
 

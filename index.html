@@ -9,7 +9,7 @@
 <body>
   <div class="login-shell" id="loginShell">
     <article class="login-card">
-      <h1>Bienvenido a Financiera Personal</h1>
+      <h1><span class="icon">🔐</span> Bienvenido a Financiera Personal</h1>
       <p>Introduce tus credenciales para acceder al dashboard local.</p>
       <form id="loginForm">
         <label>
@@ -21,26 +21,37 @@
           <input id="loginPassword" type="password" autocomplete="current-password" required />
         </label>
         <div class="form-actions">
-          <button type="submit">Iniciar sesión</button>
+          <button type="submit"><span class="icon">➡️</span> Iniciar sesión</button>
         </div>
       </form>
       <p class="login-note">Usuario: <strong>admin</strong> | Contraseña: <strong>financiera123</strong></p>
     </article>
   </div>
 
+  <div class="progress-shell hidden" id="progressShell">
+    <article class="progress-card">
+      <h1><span class="icon">⏳</span> Cargando tu dashboard</h1>
+      <p id="progressLabel">Preparando tu tablero, esto puede tardar unos segundos...</p>
+      <div class="progress-track">
+        <div class="progress-bar-inner" id="progressBarInner"></div>
+      </div>
+      <p class="progress-note">Espere mientras se carga su recorrido financiero.</p>
+    </article>
+  </div>
+
   <div class="app-shell hidden" id="appShell">
     <header class="app-header">
       <div>
-        <h1>Financiera Personal</h1>
+        <h1><span class="icon">📊</span> Financiera Personal</h1>
         <p>Administra tus ingresos, gastos, metas y ahorros de forma local.</p>
       </div>
       <div class="header-actions">
-        <button id="exportButton" type="button">Exportar datos</button>
+        <button id="exportButton" type="button"><span class="icon">📤</span> Exportar datos</button>
         <label class="import-label">
-          Importar datos
+          <span class="icon">📥</span> Importar datos
           <input id="importInput" type="file" accept="application/json" hidden />
         </label>
-        <button id="logoutButton" type="button" class="logout-button hidden">Cerrar sesión</button>
+        <button id="logoutButton" type="button" class="logout-button hidden"><span class="icon">🚪</span> Cerrar sesión</button>
       </div>
     </header>
 
@@ -66,7 +77,7 @@
 
       <section class="forms-grid">
         <article class="form-card">
-          <h2>Registrar transacción</h2>
+          <h2><span class="icon">💸</span> Registrar transacción</h2>
           <form id="transactionForm">
             <label>
               Tipo
@@ -98,7 +109,7 @@
         </article>
 
         <article class="form-card">
-          <h2>Crear meta de ahorro</h2>
+          <h2><span class="icon">🎯</span> Crear meta de ahorro</h2>
           <form id="goalForm">
             <label>
               Nombre de meta
@@ -123,7 +134,7 @@
         </article>
 
         <article class="form-card">
-          <h2>Salario y análisis</h2>
+          <h2><span class="icon">💼</span> Salario y análisis</h2>
           <form id="salaryForm">
             <label>
               Salario bruto
@@ -167,7 +178,7 @@
       <section class="tables-grid">
         <article class="table-card">
           <div class="table-header">
-            <h2>Transacciones</h2>
+            <h2><span class="icon">🧾</span> Transacciones</h2>
           </div>
           <table id="transactionsTable">
             <thead>
@@ -186,7 +197,7 @@
 
         <article class="table-card">
           <div class="table-header">
-            <h2>Metas de ahorro</h2>
+            <h2><span class="icon">🏦</span> Metas de ahorro</h2>
           </div>
           <table id="goalsTable">
             <thead>

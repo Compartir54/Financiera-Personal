@@ -77,6 +77,16 @@ button, .import-label, .button {
   text-decoration: none;
 }
 
+button span.icon,
+.import-label span.icon,
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -220,4 +230,45 @@ tbody tr:hover {
   .table-card {
     overflow-x: auto;
   }
+}
+
+.progress-shell,
+.login-shell,
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.progress-card {
+  width: min(520px, 100%);
+  margin: 80px auto;
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  text-align: center;
+}
+
+.progress-card h1 {
+  margin-top: 0;
+}
+
+.progress-track {
+  margin: 24px 0 12px;
+  height: 18px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  transition: width 0.2s ease;
+}
+
+.progress-note {
+  color: #475569;
 }
